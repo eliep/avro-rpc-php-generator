@@ -25,4 +25,4 @@ DOC;
 $args = Docopt::handle($doc, array('version' => 'Avro RPC Generator 1.7.7.0'));
 
 $generator  = new ProtocolGenerator();
-$generator->generates($args['--input'], $args['--output'], $args['--prefix'], $args['--stringType'], $args['--apcu']);
+$generator->generate($args['--input'], $args['--output'], $args['--prefix'], $args['--stringType'], $args['--apcu']);
