@@ -22,7 +22,12 @@ PT_JSON
     });
     \$client = \NettyFramedSocketTransceiver::create(\$host, \$port);
     restore_error_handler();
-    parent::__construct(\AvroProtocol::parse(self::\$json_protocol), \$client);
+    
+    PT_APCU_START
+      \$protocol = \AvroProtocol::parse(self::\$json_protocol);
+PT_APCU_END
+    
+    parent::__construct(\$protocol, \$client);
     \$protocol = unserialize(\$this->serialized_protocol);
     \$protocol->md5string = \$this->md5string;
     parent::__construct(\$protocol, \$client);
@@ -54,13 +59,26 @@ CFT;
     
 JST;
   
-  public function generates($input_folder, $output_folder, $namespace_prefix = null, $java_string = false) {
+    private $apcu_start_tpl = <<<AST
+
+    \$protocol = apcu_fetch("AVRO_PROTOCOL");
+    if (\$protocol == false) {
+AST;
+  
+    private $apcu_end_tpl = <<<AET
+      apcu_store("AVRO_PROTOCOL", \$protocol);
+    }
+AET;
+  
+  
+  
+  public function generates($input_folder, $output_folder, $namespace_prefix = null, $java_string = false, $apcu = false) {
     if (file_exists($input_folder)) {
       $path = realpath($input_folder);
       foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path)) as $filename) {
         if (!is_dir($filename) && (($temp = strlen($filename) - strlen("avpr")) >= 0 && strpos($filename, "avpr", $temp) !== FALSE)) {
           try {
-            $this->write($filename, $output_folder, $namespace_prefix, $java_string);
+            $this->write($filename, $output_folder, $namespace_prefix, $java_string, $apcu);
           } catch (Exception $e) {
             echo "Failed to generate $filename: \n".$e->getMessage()."\n";
           }
@@ -69,21 +87,21 @@ JST;
     }
   }
   
-  public function write($input_filename, $output_folder, $namespace_prefix, $java_string) {
+  public function write($input_filename, $output_folder, $namespace_prefix, $java_string, $apcu) {
     $protocol_json = file_get_contents($input_filename);
     $protocol = \AvroProtocol::parse($protocol_json);
     
     $working_tpl = $this->protocol_tpl;
     $filename = $this->getFilename($protocol);
     $subdirectory = $this->getSubdirectory($protocol);
-    $working_tpl = $this->generate($protocol, $protocol_json, $namespace_prefix, $working_tpl, $java_string);
+    $working_tpl = $this->generate($protocol, $protocol_json, $namespace_prefix, $working_tpl, $java_string, $apcu);
     
     if (!file_exists($output_folder.$subdirectory))
       mkdir($output_folder.$subdirectory, 0755, true);
     file_put_contents($output_folder.$subdirectory."/".$filename, $working_tpl);
   }
   
-  public function generate($protocol, $protocol_json, $namespace_prefix, $working_tpl, $java_string) {
+  public function generate($protocol, $protocol_json, $namespace_prefix, $working_tpl, $java_string, $apcu) {
     global $JAVA_STRING_TYPE;
     if ($java_string)
       $JAVA_STRING_TYPE = \AvroSchema::JAVA_STRING_TYPE;
@@ -101,6 +119,13 @@ JST;
     $working_tpl = str_replace("PT_JSON", $json, $working_tpl);
 
     $working_tpl = str_replace("PT_JAVA_STRING", ($java_string) ? $this->java_string_tpl : "", $working_tpl);
+    
+    $working_tpl = str_replace("PT_APCU_START", ($apcu) ? $this->apcu_start_tpl : "", $working_tpl);
+    $working_tpl = str_replace("PT_APCU_END", ($apcu) ? $this->apcu_end_tpl : "", $working_tpl);
+  
+    if ($protocol == false) {
+      apcu_store("AVRO_PROTOCOL", $protocol);
+    }
     
     $client_functions = $this->getClientFunctions($protocol);
     $working_tpl= str_replace("PT_CLIENT_FUNCTIONS", $client_functions, $working_tpl);

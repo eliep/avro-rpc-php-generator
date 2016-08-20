@@ -30,7 +30,8 @@ Optional argument:
 
   * --prefix (-p) _namespace_: The namespace prefix of the output directory
   * --stringType (-s) : If the requestor will be used with a java implementation using String instead of CharSequence
-
+  * --apcu (-a) : use APCu to cache the parsed protocol.
+  
 ## Namespacing
 The generate script will respect the namespace defined in your avro protocol. For example,
 if you have define "my.avro" as your protocol namespace, the script:
