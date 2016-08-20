@@ -13,15 +13,8 @@
     }
   ],
 
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/eliep/avro-rpc-php"
-    }
-  ],
-
   "require": {
-    "eliep/avro-rpc-php": "@dev",
+    "eliep/avro-rpc-php": "^1.7.7",
     "docopt/docopt": "1.0.*"
   },
 
