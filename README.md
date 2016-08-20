@@ -1,1 +1,1 @@
-# avro-rpc-php-generator
+# Avro RPC Generator
