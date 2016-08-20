@@ -8,7 +8,7 @@ $doc = <<<DOC
 Generate protocol class from Avro protocol file (.avpr)
 
 Usage:
-  generate.php --input <dir> --output <dir> --prefix <namespace> [--stringType] 
+  generate.php --input <dir> --output <dir> [--prefix <namespace>] [--stringType] 
   generate.php (-h | --help)
   generate.php --version
 
