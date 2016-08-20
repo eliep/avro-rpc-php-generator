@@ -16,7 +16,12 @@ PT_JSON
   
   public function __construct(\$host, \$port) {
     PT_JAVA_STRING
+    
+    set_error_handler(function() use (\$host, \$port) {
+      throw new \Exception("Unable to connect to RPC server \$host:\$port");
+    });
     \$client = \NettyFramedSocketTransceiver::create(\$host, \$port);
+    restore_error_handler();
     parent::__construct(\AvroProtocol::parse(self::\$json_protocol), \$client);
     \$protocol = unserialize(\$this->serialized_protocol);
     \$protocol->md5string = \$this->md5string;

@@ -21,7 +21,12 @@ require_once __DIR__ . "/../vendor/autoload.php";
 
 use Example\Protocol\TestProtocolRequestor;
 
-$requestor = new TestProtocolRequestor('127.0.0.1', 1412);
+try {
+  $requestor = new TestProtocolRequestor('127.0.0.1', 1412);
+} catch (Exception $e) {
+  echo $e->getMessage()."\n";
+  die();
+}
 
 $response = $requestor->testSimpleRequestResponse(array("subject" => "ping"));
 echo json_encode($response)."\n";
