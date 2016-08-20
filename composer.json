@@ -1,0 +1,34 @@
+{
+  "name": "eliep/avro-rpc-php-generator",
+  "description": "This library generates an Avro RPC client based on eliep/avro-rpc-php",
+  "keywords": ["avro", "rpc", "serialization"],
+  "license": "Apache-2.0",
+  
+  "authors": [
+    {
+      "name": "Elie P",
+      "email": "eprudhomme@gmail.com"
+    }
+  ],
+
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/eliep/avro-rpc-php"
+    }
+  ],
+
+  "require": {
+    "eliep/avro-rpc-php": "@dev",
+    "docopt/docopt": "1.0.*"
+  },
+
+  "bin": ["bin/generate.php"],
+  
+  "autoload": {
+    "psr-4": {
+      "Avro\\": "src/",
+      "Example\\": "example/"
+    }
+  }
+}
