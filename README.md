@@ -8,17 +8,11 @@ of the Avro RPC protocol in php.
 
 
 ## Installation
-Add the following to your composer.json require section 
-
-```
-"eliep/avro-rpc-php-generator": "^1.7.7.0"
-```
-
-and run
  
 ```bash
-composer install
+composer require eliep/avro-rpc-php-generator
 ```
+
 
 
 ## Protocol class Generation
