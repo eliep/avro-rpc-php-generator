@@ -22,9 +22,9 @@ php vendor/bin/generate.php --help
 
 Required arguments:
 
-  * -i <dir> --input <dir>: The folder containing your avro protocol
-  * -o <dir> --output <dir>: The folder where the protocol classes will be written
-  * -p <namespace> --prefix <namespace>: The namespace prefix of the output directory
+  * -i _dir_ | --input _dir_ : The folder containing your avro protocol
+  * -o _dir_ | --output _dir_ : The folder where the protocol classes will be written
+  * -p _namespace_ | --prefix _namespace_: The namespace prefix of the output directory
   
 Optionnal argument:
 
