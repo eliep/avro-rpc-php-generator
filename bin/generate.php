@@ -16,7 +16,7 @@ Options:
   -h --help  Show this screen
   -i <dir> --input <dir>               The folder containing your avro protocol
   -o <dir> --output <dir>              The folder where the protocol classes will be written
-  -p <namespace> --prefix <namespace>  The namespace prefix for the protocol classes
+  -p <namespace> --prefix <namespace>  The namespace prefix of the output directory
   -s --stringType                      If the requestor will be used with a java implementation using String instead of CharSequence
 
 DOC;

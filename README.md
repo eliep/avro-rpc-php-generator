@@ -41,12 +41,10 @@ An example is available in example/ folder.
 ```bash
 php bin/generate.php sample_rpc_server.php
 ```
-
 2. Use the sample client
 ```bash
 php bin/generate.php sample_rpc_client.php
 ```
-
 3. Regenerate the sample client
 
 ```bash
