@@ -37,18 +37,17 @@ Optionnal argument:
 ## Example
 An example is available in example/ folder.
 
-  1. Start a server
+  * Start a server
 ```bash
 php bin/generate.php sample_rpc_server.php
 
 ```
-  2. Use the sample client
+  * Use the sample client
 ```bash
 php bin/generate.php sample_rpc_client.php
 ```
 
-  3. Regenerate the sample client
-
+  * Regenerate the sample client
 ```bash
 php bin/generate.php --input example/avro/ --output example/ --prefix Example --stringType
 ```
