@@ -11,7 +11,7 @@ of the Avro RPC protocol in php.
 Add the following to your composer.json require section 
 
 ```
-"eliep/avro-rpc-php": "^1.7.7.0"
+"eliep/avro-rpc-php-generator": "^1.7.7.0"
 ```
 
 and run
@@ -41,35 +41,22 @@ Optional argument:
 The generate script will respect the namespace defined in your avro protocol. For example,
 if you have define "my.avro" as your protocol namespace, the script:
   - create the folder `My\Avro` in the directory specified by the -o option.
-  - use My\Avro for the generated php class.
+  - use `My\Avro` for the generated php class.
   
 Note: If the directory specified by the -o option has a namespace, 
 you can use the option -p to specify it so that the namespace
-of the generated php class will use it as a prefix
+of the generated php class will use it.
 
 The name of the generate class will be protocol name with the `Requestor` suffix 
 (if your protocol's name is `Protocol`, the class name will be `ProtocolRequestor`);
 
 ## Protocol class Usage
-If your protocol namespace is `My\Avro` and your protocol name is `Protocol`,
-you can connect to an Avro RPC server with
 
-```php
-use My\Avro\ProtocolRequestor
-
-$serverHost = '127.0.0.1';
-$serverPort = 1412;
-$requestor = new ProtocolRequestor($serverHost, $serverPort);
-```
-
-The `ProtocolRequestor` class contains one function for each message in your protocol.
-These functions accept as many argument as defined by the corresponding message.
-
-For example, if your protocol define a message like:
+For example, if your protocol is:
 ```json
 {
- "namespace": "protocol",
- "protocol": "TestProtocol",
+ "namespace": "my.avro",
+ "protocol": "Protocol",
 
  "types": [
      {"type": "record", "name": "SimpleRequest",
@@ -88,6 +75,28 @@ For example, if your protocol define a message like:
   }
 }
 ```
+
+you can connect to an Avro RPC Server with
+
+```php
+use My\Avro\ProtocolRequestor
+
+$serverHost = '127.0.0.1';
+$serverPort = 1412;
+try {
+  $requestor = new ProtocolRequestor($serverHost, $serverPort);
+} catch (\Exception $e) {
+    // unable to reach the server.
+}
+```
+
+The `ProtocolRequestor` set a temporary error handler to detect if the socket connection
+ worked. If not, the constructor throw a php Exception.
+
+
+The `ProtocolRequestor` class contains one function for each message in your protocol.
+These functions accept as many argument as defined by the corresponding message.
+
 You can call:
 
 ```php
@@ -100,8 +109,8 @@ An example is available in example/ folder.
   - Start a server
 ```bash
 php bin/generate.php sample_rpc_server.php
-
 ```
+
   - Use the sample client
 ```bash
 php bin/generate.php sample_rpc_client.php
